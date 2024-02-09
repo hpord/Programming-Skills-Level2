@@ -70,15 +70,23 @@ def generar_tabla(partidos, equipos):
                 else: tabla[equipo][3] += 1
     
     tabla_ord = [[equipo, *tabla[equipo]] for equipo in tabla]
-    #print(tabla_ord)
-    #ordenar(tabla_ord)
+    ordenar(tabla_ord)
     print(f"EQUIPO                 PJ   PG   PE   PP   GF   GC   DG   Ptos")
     for team in tabla_ord:
-        print(f"{tabla_ord[0]:20} {tabla_ord[1]:4d} {tabla_ord[2]:4d} {tabla_ord[3]:4d} {tabla_ord[4]:4d} {tabla_ord[5]:4d} {tabla_ord[6]:4d} {tabla_ord[7]:4d} {tabla_ord[8]:4d} {tabla_ord[9]:4d}")
+        print(f"{team[0]:20} {team[1]:4d} {team[2]:4d} {team[3]:4d} {team[4]:4d} {team[5]:4d} {team[6]:4d} {team[7]:4d} {team[8]:6d}")
             
 #%%
 def ordenar(tabla_lista):
-    pass
+    for i in range(len(tabla_lista)-1):
+        for j in range(i+1, len(tabla_lista)):
+            if tabla_lista[j][8] > tabla_lista[i][8]:
+                tabla_lista[i], tabla_lista[j] = tabla_lista[j], tabla_lista[i]
+            elif tabla_lista[j][8] == tabla_lista[i][8]:
+                if tabla_lista[j][7] > tabla_lista[i][7]:
+                    tabla_lista[i], tabla_lista[j] = tabla_lista[j], tabla_lista[i]
+                elif tabla_lista[j][7] == tabla_lista[i][7]:
+                    if tabla_lista[j][5] == tabla_lista[i][5]:
+                        tabla_lista[i], tabla_lista[j] = tabla_lista[j], tabla_lista[i]
 #%%
 def main():
     big_six = [
@@ -91,7 +99,6 @@ def main():
         ]
     partidos = Generador_Fixture(big_six)
     generar_resultados(partidos, big_six)
-    partidos.mostrar_partidos()
     print()
     generar_tabla(partidos, big_six)
     
