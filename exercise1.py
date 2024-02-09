@@ -33,15 +33,11 @@ class Generador_Fixture:
     @property
     def map_partidos(self):
         return self._map_partidos
-    #@map_partidos.setter
+    
     def agregar_resultado(self, equipo, rival, resultado):
-        self._map_partidos[equipo][rival].append((resultado[0], resultado[1]))
-        self._map_partidos[rival][equipo].append((resultado[1], resultado[0]))
+        self._map_partidos[equipo][rival].append([resultado[0], resultado[1]])
+        self._map_partidos[rival][equipo].append([resultado[1], resultado[0]])
 
-#%%
-class Generador_Resultados:
-    def __init__(self, partidos):
-        pass
     
 #%%
 def generar_resultados(partidos, equipos):
@@ -54,10 +50,35 @@ def generar_resultados(partidos, equipos):
 def generar_tabla(partidos, equipos):
     tabla = {}
     for equipo in equipos:
-        tabla[equipo] = [0, 0, 0]
+        tabla[equipo] = [0, 0, 0, 0, 0, 0, 0, 0]
+        
         for rival in partidos.map_partidos[equipo]:
-            pass
-
+            tabla[equipo][0] += 3
+            for k in range(3):
+                goles_equipo = partidos.map_partidos[equipo][rival][k][0]
+                goles_rival = partidos.map_partidos[equipo][rival][k][1]
+                #print(goles_equipo, tabla[equipo][0])
+                tabla[equipo][4] += goles_equipo
+                tabla[equipo][5] += goles_rival
+                tabla[equipo][6] = tabla[equipo][4] - tabla[equipo][5]
+                if goles_equipo > goles_rival:
+                    tabla[equipo][1] += 1
+                    tabla[equipo][7] += 3
+                elif goles_equipo == goles_rival:
+                    tabla[equipo][2] += 1
+                    tabla[equipo][7] += 1
+                else: tabla[equipo][3] += 1
+    
+    tabla_ord = [[equipo, *tabla[equipo]] for equipo in tabla]
+    #print(tabla_ord)
+    #ordenar(tabla_ord)
+    print(f"EQUIPO                 PJ   PG   PE   PP   GF   GC   DG   Ptos")
+    for team in tabla_ord:
+        print(f"{tabla_ord[0]:20} {tabla_ord[1]:4d} {tabla_ord[2]:4d} {tabla_ord[3]:4d} {tabla_ord[4]:4d} {tabla_ord[5]:4d} {tabla_ord[6]:4d} {tabla_ord[7]:4d} {tabla_ord[8]:4d} {tabla_ord[9]:4d}")
+            
+#%%
+def ordenar(tabla_lista):
+    pass
 #%%
 def main():
     big_six = [
